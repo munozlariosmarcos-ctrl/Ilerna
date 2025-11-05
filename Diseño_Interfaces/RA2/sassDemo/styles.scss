@@ -1,0 +1,24 @@
+@use 'components/anidacion';
+
+//Variables
+$primary-color: white;
+$secondary-color: green;
+
+p{
+    font-size: 25px;
+    color: yellow;
+}
+
+h1{
+    font-size: 40px;
+    color: red;
+}
+
+body{
+    background-color: $primary-color;
+    font-family: sans-serif;
+}
+h2{
+    font-size: 30px;
+    color: $secondary-color;
+}
