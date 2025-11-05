@@ -8,20 +8,19 @@ class Punto:
         print(f"Punto en ({self.x}, {self.y}) eliminado")
         
     def __str__(self):
-        return f"({self.x}, {self.y})"
+        return "Punto con x=" + str(self.x) + " e y=" + str(self.y)   
+    
     def __eq__(self, otro):
-        if isinstance(otro, Punto):
-            return self.x==otro.x and self.y==otro.y
-        return False
+        return self.x==otro.x and self.y==otro.y
     
-    def __add__(self, otro):
-        if isinstance(otro, Punto):
-            return Punto(self.x + otro.x, self.y + otro.y)
-        return NotImplemented
-    
-if __name__ == "__main__":
+    def __add__(self, otro):    
+        return Punto(self.x + otro.x, self.y + otro.y)
+        
+
+# código de prueba
     p1 = Punto(2, 3)
-    p2 = Punto(2, 3)
-    p3=p1+p2
-    print(f"Suma de puntos: {p3}")
-    print(f"p1 es igual a p2? {p1==p2}")
+    p2 = Punto(1, 4)
+    
+    print(p1)      
+    print(p2)         
+    print(p1 == p2)
