@@ -1,26 +1,18 @@
-class Punto:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        print(f"Punto creado en ({self.x}, {self.y})")
+'''Crea un programa que pida dos números al usuario e intente dividirlos.
+Pasos:
 
-    def __del__(self):
-        print(f"Punto en ({self.x}, {self.y}) eliminado")
-        
-    def __str__(self):
-        return "Punto con x=" + str(self.x) + " e y=" + str(self.y)   
-    
-    def __eq__(self, otro):
-        return self.x==otro.x and self.y==otro.y
-    
-    def __add__(self, otro):    
-        return Punto(self.x + otro.x, self.y + otro.y)
-        
-
-# código de prueba
-    p1 = Punto(2, 3)
-    p2 = Punto(1, 4)
-    
-    print(p1)      
-    print(p2)         
-    print(p1 == p2)
+Usa try y except para capturar divisiones por cero y errores de tipo (por ejemplo, si el usuario escribe texto).
+Si la división es correcta, muestra el resultado dentro del bloque else.
+Usa un bloque finally para mostrar un mensaje de cierre, independientemente del resultado.'''
+try:
+    num1 = float(input("Introduce el primer número: "))
+    num2 = float(input("Introduce el segundo número: "))
+    resultado = num1 / num2
+except ZeroDivisionError as e:
+    print("Error: No se puede dividir por cero.")
+except ValueError as e:
+    print(f"Error:no has introducido un numero {e.args}.")
+else:
+    print(f"El resultado de la división es: {resultado}")
+finally:
+    print("Gracias por usar el programa de división.")
