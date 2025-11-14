@@ -47,37 +47,37 @@ class Biblioteca:
             print(f"Título: {libro.titulo}, Autor: {libro.autor}, Estado: {estado}")
 
 
-if __name__ == "__main__":
-    biblioteca = Biblioteca()
 
-    libro1 = Libro("1984", "Pblo Orti")
-    libro2 = Libro("Quijote", "Antonio Molina")
-    libro3 = Libro("Blancanieves", "Manolin")
+biblioteca = Biblioteca()
 
-    biblioteca.agregar_libro(libro1)
-    biblioteca.agregar_libro(libro2)
-    biblioteca.agregar_libro(libro3)
+libro1 = Libro("1984", "Pblo Orti")
+libro2 = Libro("Quijote", "Antonio Molina")
+libro3 = Libro("Blancanieves", "Manolin")
 
-    biblioteca.mostrar_libros()
+biblioteca.agregar_libro(libro1)
+biblioteca.agregar_libro(libro2)
+biblioteca.agregar_libro(libro3)
 
-    try:
-        libro_a_prestar = biblioteca.buscar_por_titulo("1984")
-        if libro_a_prestar:
-            libro_a_prestar.prestar()
-            print(f"Se ha prestado el libro: {libro_a_prestar.titulo}")
-        else:
-            print("Libro no encontrado.")
-    except Exception as e:
-        print(e)
+biblioteca.mostrar_libros()
 
-    try:
-        libro_a_devolver = biblioteca.buscar_por_titulo("1984")
-        if libro_a_devolver:
-            libro_a_devolver.devolver()
-            print(f"Has devuelto el libro: {libro_a_devolver.titulo}")
-        else:
-            print("Libro no encontrado.")
-    except Exception as e:
-        print(e)
+try:
+    libro_a_prestar = biblioteca.buscar_por_titulo("1984")
+    if libro_a_prestar:
+        libro_a_prestar.prestar()
+        print(f"Se ha prestado el libro: {libro_a_prestar.titulo}")
+    else:
+        print("Libro no encontrado.")
+except Exception as e:
+    print(e)
 
-    biblioteca.mostrar_libros()
+try:
+    libro_a_devolver = biblioteca.buscar_por_titulo("1984")
+    if libro_a_devolver:
+        libro_a_devolver.devolver()
+        print(f"Has devuelto el libro: {libro_a_devolver.titulo}")
+    else:
+        print("Libro no encontrado.")
+except Exception as e:
+    print(e)
+
+biblioteca.mostrar_libros()
