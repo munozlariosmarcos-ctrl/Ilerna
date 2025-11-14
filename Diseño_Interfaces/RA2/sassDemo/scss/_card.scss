@@ -1,0 +1,57 @@
+.card {
+  background-color: #fff;
+  border-radius: $borde-redondeado;
+  padding: $espaciado-base;
+  @include shadow(2);
+  max-width: 320px;
+  margin: $espaciado-base auto;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  &__image {
+    width: 100%;
+    border-radius: $borde-redondeado;
+  }
+
+  &__content {
+    padding: $espaciado-base;
+    color: $color-texto;
+  }
+
+  &__title {
+    color: $color-primario;
+    font-size: 1.2rem;
+    margin-bottom: $espaciado-base;
+  }
+
+  &__description {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: $espaciado-base;
+  }
+
+  &__price {
+    display: block;
+    color: $color-secundario;
+    font-weight: bold;
+    margin-bottom: $espaciado-base;
+  }
+
+  &__button {
+    background-color: $color-primario;
+    color: #fff;
+    border: none;
+    border-radius: $borde-redondeado;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $color-secundario;
+    }
+  }
+}
