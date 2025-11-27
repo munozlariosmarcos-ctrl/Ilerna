@@ -4,5 +4,4 @@ let persona = {
   trabajo: "Ingeniera"
 };
 
-console.log(persona.nombre); 
-console.log(persona.edad);   
+console.log(persona["edad"]); 
