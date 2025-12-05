@@ -1,0 +1,43 @@
+@mixin flex-center($dir: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $dir;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin btn($bg: $color-primary, $color: $color-white) {
+  padding: 0.6rem 1.2rem;
+  border-radius: $radius;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: $bg;
+  color: $color;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  
+  &:hover {
+    filter: brightness(110%);
+  }
+}
+
+@mixin odd-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: lighten($color-panel, 10%);
+  color: $color-accent;
+  padding: 0.5rem 1rem;
+  border-radius: $radius;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  min-width: 60px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: lighten($color-panel, 20%);
+    color: lighten($color-accent, 10%);
+  }
+}

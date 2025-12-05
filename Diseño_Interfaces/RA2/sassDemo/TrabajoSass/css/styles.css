@@ -1,0 +1,568 @@
+/* --- VARIABLES (Tema Oscuro Profesional) --- */
+:root {
+  --bg-body: #333333;         /* Gris fondo */
+  --bg-panel: #282828;        /* Gris paneles */
+  --bg-header: #126e51;       /* Verde Bet365/Sportium */
+  --text-main: #e0e0e0;       /* Blanco suave */
+  --text-muted: #999999;      /* Gris texto secundario */
+  --accent: #ffdf1b;          /* Amarillo Cuotas */
+  --accent-hover: #d4b912;
+  --border-color: #444444;
+}
+
+/* --- RESET BÁSICO --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  font-size: 13px; /* Fuente pequeña para mayor densidad */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* --- HEADER --- */
+.site-header {
+  background-color: var(--bg-header);
+  color: white;
+  padding: 0 20px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.brand-area { display: flex; align-items: center; gap: 10px; }
+.brand { font-size: 18px; font-weight: 700; text-transform: uppercase; font-style: italic; }
+
+.user-area a {
+  font-weight: 600;
+  margin-left: 15px;
+  font-size: 12px;
+}
+.btn-login { color: var(--accent); }
+.btn-registro { background: var(--accent); color: #222 !important; padding: 5px 10px; border-radius: 4px; }
+
+/* --- LAYOUT PRINCIPAL (GRID 3 COLUMNAS) --- */
+.main-container {
+  display: grid;
+  /* Izquierda (200px) - Centro (Auto) - Derecha (280px) */
+  grid-template-columns: 200px 1fr 280px; 
+  gap: 10px;
+  max-width: 1400px;
+  margin: 15px auto;
+  padding: 0 10px;
+  width: 100%;
+  align-items: start;
+}
+
+/* --- COLUMNA IZQUIERDA (MENÚ) --- */
+.sidebar-nav {
+  background: var(--bg-panel);
+  border-radius: 4px;
+  padding: 10px 0;
+  min-height: 300px;
+}
+
+.sidebar-nav h3 {
+  padding: 0 15px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 5px;
+}
+
+.nav-list li a {
+  display: block;
+  padding: 8px 15px;
+  color: var(--text-main);
+  border-left: 3px solid transparent;
+  transition: 0.2s;
+}
+.nav-list li a:hover {
+  background: #3a3a3a;
+  border-left-color: var(--accent);
+  color: white;
+}
+
+/* --- COLUMNA CENTRAL (EVENTOS) --- */
+.content-area {
+  min-height: 500px;
+}
+
+.hero-banner {
+  background: linear-gradient(90deg, #0d523c 0%, #126e51 100%);
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.hero-text h2 { font-size: 16px; margin-bottom: 5px; color: white; }
+.hero-text p { font-size: 12px; color: #cfcfcf; }
+
+.league-header {
+  background: #444;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  border-radius: 4px 4px 0 0;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Filas de eventos (Estilo Tabla) */
+.event-row {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 12px;
+  display: grid;
+  /* Hora | Equipos | Cuotas */
+  grid-template-columns: 50px 1fr auto; 
+  gap: 10px;
+  align-items: center;
+  transition: background 0.2s;
+}
+.event-row:last-child { border-radius: 0 0 4px 4px; border-bottom: none; }
+.event-row:hover { background: #333; }
+
+.event-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.teams { font-size: 13px; font-weight: 600; color: white; margin-bottom: 3px; }
+.meta-info { font-size: 11px; color: var(--text-muted); }
+
+/* Botones de Cuotas */
+.odds-container {
+  display: flex;
+  gap: 6px;
+}
+
+.odd-btn {
+  background: #3e3e3e;
+  border: none;
+  border-radius: 3px;
+  width: 60px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.odd-btn:hover { background: #505050; }
+.odd-btn.active { 
+    background: var(--text-main); 
+    color: #333;
+}
+.odd-btn.active .odd-val { color: #000; }
+
+.odd-label { font-size: 9px; color: var(--text-muted); margin-bottom: 2px; }
+.odd-val { font-size: 13px; font-weight: 700; color: var(--accent); }
+
+/* --- COLUMNA DERECHA (TICKET) --- */
+.ticket-sidebar {
+  position: sticky;
+  top: 70px; /* Sticky effect */
+}
+
+.ticket-card {
+  background: #e6e6e6; /* Fondo claro papel */
+  color: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.ticket-header {
+  background: var(--bg-header);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.ticket-body {
+  padding: 10px;
+  min-height: 100px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.empty-msg { text-align: center; font-size: 12px; color: #777; margin-top: 20px; }
+
+/* Item dentro del ticket */
+.ticket-item {
+  background: white;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.ticket-remove { color: red; cursor: pointer; font-weight: bold; padding: 0 5px; }
+
+.ticket-footer {
+  background: #d4d4d4;
+  padding: 15px;
+  border-top: 1px solid #ccc;
+}
+
+.total-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; font-size: 14px;}
+
+.input-apuesta {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn-apostar {
+  width: 100%;
+  background: var(--bg-header);
+  color: white;
+  border: none;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.btn-apostar:hover { background: #0e5640; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .main-container { grid-template-columns: 1fr 280px; } 
+  .sidebar-nav { display: none; }
+}
+
+@media (max-width: 600px) {
+  .main-container { grid-template-columns: 1fr; } 
+  .ticket-sidebar { position: static; margin-top: 20px; }
+  .hero-banner { display: none; } 
+  .event-row { grid-template-columns: 40px 1fr; } 
+  .odds-container { grid-column: 1 / -1; justify-content: space-between; margin-top: 5px; }
+  .odd-btn { width: 32%; } 
+}
+
+/* --- ESTILOS EXTRA: REGISTRO Y PROMOCIONES --- */
+
+/* Formulario de Registro (Centrado) */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.auth-card {
+  background: var(--bg-panel);
+  padding: 30px;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  border-top: 4px solid var(--bg-header);
+}
+
+.auth-card h2 {
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.form-group { margin-bottom: 15px; }
+
+.form-group label {
+  display: block;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  background: #3e3e3e;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: white;
+  outline: none;
+}
+.form-group input:focus { border-color: var(--accent); }
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  color: #222;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.btn-submit:hover { background: var(--accent-hover); }
+
+/* Grid de Promociones */
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.promo-card {
+  background: var(--bg-panel);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s;
+}
+.promo-card:hover { transform: translateY(-5px); }
+
+
+.promo-img {
+  width: 100%;
+  height: 160px;        
+  object-fit: cover;   
+  display: block;
+}
+
+.promo-body { padding: 15px; }
+.promo-body h3 { color: var(--accent); margin-bottom: 10px; font-size: 16px; }
+.promo-body p { color: var(--text-muted); font-size: 13px; line-height: 1.4; margin-bottom: 15px; }
+
+.btn-claim {
+  display: inline-block;
+  background: var(--bg-header);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.btn-claim:hover { background: #0e5640; color: white; }
+
+/* --- ESTILOS DEL MODAL (VENTANA EMERGENTE) --- */
+.modal-overlay {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #282828;  /* Color de fondo del panel (Gris oscuro) */
+  width: 90%;           /* Ancho en móvil */
+  max-width: 600px;     /* Ancho máximo en PC */
+  max-height: 80vh;     /* Que no sea más alto que el 80% de la pantalla */
+  border-radius: 8px;   /* Bordes redondos */
+  overflow: hidden;     /* Para que no se salga el contenido */
+  display: flex;        
+  flex-direction: column;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8); /* Sombra para efecto 3D */
+  color: white;         /* Texto blanco */
+}
+
+.modal-header {
+  background: var(--bg-header);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+.modal-header h3 { margin: 0; font-size: 16px; }
+.close-modal { font-size: 24px; cursor: pointer; }
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.market-group { margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 15px; }
+.market-group h4 { color: var(--accent); margin-bottom: 10px; font-size: 13px; text-transform: uppercase; }
+
+.market-options { display: flex; gap: 10px; }
+.odd-btn.wide { 
+  flex: 1; 
+  flex-direction: row; 
+  justify-content: space-between; 
+  padding: 0 15px; 
+  width: auto;
+}
+
+.market-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #333;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+/* Cursor para indicar que se puede hacer clic en el partido */
+.event-details { cursor: pointer; }
+.event-details:hover .teams { color: var(--accent); text-decoration: underline; }
+
+/* Estilo para items del historial */
+.my-bet-item {
+  background: #fff;
+  border-left: 4px solid var(--bg-header);
+  padding: 8px;
+  margin-bottom: 5px;
+  font-size: 11px;
+  color: #333;
+}
+.bet-status { font-weight: bold; color: orange; font-size: 10px; display:block; margin-top:4px;}
+/* --- ESTILOS DE CASH OUT / CERRAR APUESTA --- */
+
+/* Botón de cerrar apuesta */
+.btn-cashout {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px;
+  background-color: #f0ad4e; /* Color naranja/dorado tipo botón de acción */
+  border: 1px solid #dba24a;
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-cashout:hover {
+  background-color: #ec971f;
+}
+
+.btn-cashout span.amount {
+  background: rgba(0,0,0,0.2);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+/* Estado de apuesta cerrada/cobrada */
+.my-bet-item.closed {
+  background-color: #e0e0e0;
+  border-left-color: #999;
+  opacity: 0.8;
+}
+
+.cashout-msg {
+  display: block;
+  text-align: center;
+  background: #28a745; /* Verde éxito */
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+/* --- ESTILOS DE BANCA --- */
+.btn-bank {
+  flex: 1; /* Ocupan el 50% cada uno */
+  padding: 8px 0;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  color: white;
+  transition: opacity 0.2s;
+}
+.btn-bank:hover { opacity: 0.9; }
+
+.btn-bank.deposit {
+  background-color: #28a745; /* Verde */
+}
+
+.btn-bank.withdraw {
+  background-color: #555; /* Gris */
+  border: 1px solid #777;
+}
+.btn-bank.withdraw:hover {
+  background-color: #dc3545; /* Rojo al pasar el ratón */
+}
+/* Estilo para que se note que se puede hacer clic en los nombres */
+.event-details {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.event-details:hover {
+    background-color: #444; /* Se ilumina un poco al pasar el ratón */
+}
+
+.event-details:hover .teams {
+    color: var(--accent); /* El texto se pone amarillo */
+    text-decoration: underline;
+}
+
+/* Ajustes para el Modal */
+.market-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.market-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #3a3a3a;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 12px;
+}
+
+.odd-btn.wide {
+    width: 100%; /* Botones anchos dentro del modal */
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 15px;
+}
