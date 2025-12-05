@@ -1,0 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap");
+/*--- VARIABLES ---*/
+/*--- ESTILOS GENERALES*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #000;
+}
+
+img {
+  display: inline-block;
+}
+
+body > * {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/*---- TITULOS ---*/
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/*--- CABECERA ---*/
+header {
+  background: #ececec;
+  text-align: center;
+  padding: 1em 0;
+}
+header a {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.6em;
+  cursor: pointer;
+}
+header a img {
+  width: 4.5em;
+  margin: 0;
+}
+header a h1 {
+  margin: 0;
+}
+header h2 {
+  margin-top: 0.4em;
+}
+
+/*--- ENLACES ---*/
+nav {
+  background: #ececec;
+  margin-top: 0.4em;
+  padding: 0.4em 0;
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 1.5em;
+}
+nav li {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+nav a:hover,
+nav li:hover {
+  color: red;
+  font-weight: 700;
+}
+
+section {
+  min-height: 20em;
+}
+
+/*--- FOOTER ----*/
+footer div {
+  background: #e2e2e2;
+  padding: 1em;
+  text-align: center;
+}
+footer div img {
+  width: 3em;
+  margin: 0 0.4em;
+  transition: transform 0.2s;
+}
+footer div img:hover {
+  transform: scale(1.15);
+}
+footer p {
+  background: #e2e2e2;
+  text-align: center;
+  padding: 0.5em;
+  font-size: 0.8rem;
+}
+footer p a {
+  font-weight: 700;
+}/*# sourceMappingURL=styles.css.map */

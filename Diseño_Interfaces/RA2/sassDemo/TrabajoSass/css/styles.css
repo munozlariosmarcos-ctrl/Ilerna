@@ -1,0 +1,220 @@
+/* Variables de color estilo bet365 */
+:root {
+  --color-primary: #00a650; /* verde bet365 */
+  --color-accent: #ffcc00;  /* amarillo bet365 */
+  --color-bg: #1b1b1b;      /* fondo oscuro */
+  --color-card: #272727;    /* tarjetas oscuras */
+  --color-text: #f1f1f1;    /* texto claro */
+  --radius: 8px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.5);
+  --max-width: 1400px;
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Reset y base */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* Contenedor principal */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Header */
+.site-header {
+  background: #141414;
+  color: #fff;
+  padding: 0.8rem 1rem;
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav li {
+  margin-left: 1rem;
+}
+
+.main-nav a {
+  color: var(--color-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.main-nav a:hover {
+  color: var(--color-accent);
+}
+
+/* Hero section */
+.hero {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.hero img.hero-img {
+  max-width: 220px;
+  margin-bottom: 0.5rem;
+}
+
+/* Eventos grid */
+.events .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bet-card {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  transition: transform 0.2s;
+}
+
+.bet-card:hover {
+  transform: translateY(-3px);
+}
+
+.bet-card header h4 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.odds {
+  margin: 0.5rem 0;
+}
+
+.odds button.odd {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.odds button.odd:hover {
+  background: #008c4a; /* verde más oscuro al pasar */
+}
+
+/* Ticket lateral */
+.ticket {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.ticket h4 {
+  margin-top: 0;
+  font-weight: 700;
+}
+
+.ticket ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.ticket li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.remove-btn {
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.ticket .total {
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #008c4a;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: var(--color-accent);
+  color: #000;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background: #e6b800;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .events .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .events .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-header .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    margin-top: 0.5rem;
+  }
+
+  .main-nav li {
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+  }
+}

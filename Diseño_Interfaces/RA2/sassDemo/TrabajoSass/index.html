@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BetSport - Apuestas Deportivas</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* Estilo simple para el botón de eliminar */
+  .remove-btn {
+    margin-left: 10px;
+    color: red;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+<header class="site-header">
+<div class="container">
+<div class="brand-area">
+<img src="img/logo.png" class="logo" alt="Logo BetSport" width="100" />
+<h1 class="brand">BetSport</h1>
+</div>
+
+<nav class="main-nav">
+<ul>
+<li><a href="index.html">Inicio</a></li>
+<li><a href="promociones.html">Promociones</a></li>
+<li><a href="contacto.html">Contacto</a></li>
+<li><a href="registro.html" class="btn-registro">Registro</a></li>
+</ul>
+</nav>
+
+</div>
+</header>
+
+<main class="container">
+<section class="hero">
+<img class="hero-img" src="img/logo.png" alt="Apuestas deportivas" width="250" />
+<h2>Apuesta en vivo. Gana a lo grande.</h2>
+<p class="lead">Mercados en directo, cuotas ajustadas y pagos rápidos.</p>
+<a class="btn-primary" href="registro.html">Registrarse</a>
+</section>
+
+<section class="events">
+<h3>Partidos destacados</h3>
+
+<div class="grid">
+
+<!-- Fútbol -->
+<article class="bet-card">
+<img src="img/partido1.jpg" alt="Partido destacado" class="card-img"  width="320"/>
+<header>
+<h4>Real Madrid vs Barcelona</h4>
+<time datetime="2025-12-05">5 Dic 2025 - 20:00</time>
+</header>
+<div class="odds">
+<button class="odd" data-event="Real Madrid vs Barcelona" data-odd="2.85">2.85</button>
+<button class="odd" data-event="Real Madrid vs Barcelona" data-odd="2.50">2.50</button>
+<button class="odd" data-event="Real Madrid vs Barcelona" data-odd="2.80">2.80</button>
+</div>
+<p class="bet-info">Opciones: Ganador, Handicaps y Más.</p>
+</article>
+
+<article class="bet-card">
+<img src="img/partido2.jpg" alt="Partido destacado" class="card-img"  width="310"/>
+<header>
+<h4>Atletico de Madrid vs Sevilla</h4>
+<time datetime="2025-12-05">6 Dic 2025 - 21:00</time>
+</header>
+<div class="odds">
+<button class="odd" data-event="Atletico de Madrid vs Sevilla" data-odd="1.35">1.35</button>
+<button class="odd" data-event="Atletico de Madrid vs Sevilla" data-odd="3.50">3.50</button>
+<button class="odd" data-event="Atletico de Madrid vs Sevilla" data-odd="5.20">5.20</button>
+</div>
+<p class="bet-info">Opciones: Ganador, Handicaps y Más.</p>
+</article>
+
+<!-- Baloncesto -->
+<article class="bet-card">
+<img src="img/baloncesto1.jpg" alt="" class="card-img" />
+<header>
+<img src="img/basket.webp" alt="" width="310">
+<h4>Real Madrid vs Barcelona (Basket)</h4>
+<time datetime="2025-12-06">6 Dic 2025 - 19:30</time>
+</header>
+<div class="odds">
+<button class="odd" data-event="Real Madrid vs Barcelona (Basket)" data-odd="1.90">1.90</button>
+<button class="odd" data-event="Real Madrid vs Barcelona (Basket)" data-odd="1.95">1.95</button>
+</div>
+<p class="bet-info">Opciones: Ganador, Handicap, Total puntos.</p>
+</article>
+
+<!-- Tenis -->
+<article class="bet-card">
+<img src="img/tenis1.jpg" alt=" " width="310" />
+<h4>Federer vs Nadal</h4>
+<header>
+<time datetime="2025-12-07">7 Dic 2025 - 18:00</time>
+</header>
+<div class="odds">
+<button class="odd" data-event="Federer vs Nadal" data-odd="1.80">1.80</button>
+<button class="odd" data-event="Federer vs Nadal" data-odd="2.10">2.10</button>
+</div>
+<p class="bet-info">Opciones: Ganador del partido.</p>
+</article>
+
+</div>
+</section>
+
+<aside class="ticket" id="ticket">
+<h4>Mi Boleto</h4>
+<ul id="ticket-list"></ul>
+<p class="total">Total cuota: <span id="ticket-total">1.00</span></p>
+<button class="btn-secondary" id="apostar">Realizar apuesta</button>
+</aside>
+
+<script>
+// Variables del cupón
+let totalCuota = 1;
+const lista = document.getElementById("ticket-list");
+const total = document.getElementById("ticket-total");
+
+// Añadir selección con opción de eliminar
+document.querySelectorAll(".odd").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const evento = btn.dataset.event;
+        const cuota = parseFloat(btn.dataset.odd);
+
+        const li = document.createElement("li");
+        li.textContent = evento + " - Cuota " + cuota;
+
+        const removeBtn = document.createElement("span");
+        removeBtn.textContent = "✖";
+        removeBtn.classList.add("remove-btn");
+        removeBtn.addEventListener("click", () => {
+            totalCuota /= cuota;
+            total.textContent = totalCuota.toFixed(2);
+            li.remove();
+        });
+
+        li.appendChild(removeBtn);
+        lista.appendChild(li);
+
+        totalCuota *= cuota;
+        total.textContent = totalCuota.toFixed(2);
+    });
+});
+
+// Botón realizar apuesta
+document.getElementById("apostar").addEventListener("click", () => {
+    if (lista.children.length === 0) {
+        alert("No has seleccionado ninguna apuesta.");
+        return;
+    }
+    const importe = parseFloat(prompt("Introduce el importe de la apuesta:"));
+    if (isNaN(importe) || importe <= 0) {
+        alert("Importe no válido.");
+        return;
+    }
+    const ganancia = importe * totalCuota;
+    alert(`Apuesta realizada!\nImporte: ${importe}€\nCuota total: ${totalCuota.toFixed(2)}\nPosible ganancia: ${ganancia.toFixed(2)}€`);
+    // Reset del ticket
+    lista.innerHTML = "";
+    totalCuota = 1;
+    total.textContent = totalCuota.toFixed(2);
+});
+</script>
+
+</body>
+</html>

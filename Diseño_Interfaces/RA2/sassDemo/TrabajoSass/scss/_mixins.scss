@@ -1,0 +1,16 @@
+
+@mixin flex-center($dir: row, $justify: center, $align: center) {
+display: flex;
+flex-direction: $dir;
+justify-content: $justify;
+align-items: $align;
+}
+
+
+@mixin btn($padding: 0.6rem 1.2rem, $radius: $radius) {
+padding: $padding;
+border-radius: $radius;
+font-weight: 600;
+cursor: pointer;
+border: none;
+}
