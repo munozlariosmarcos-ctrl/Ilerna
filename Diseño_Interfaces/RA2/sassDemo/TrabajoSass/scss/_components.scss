@@ -1,193 +1,74 @@
-
-.main-nav ul {
-  @extend %list-reset;
-  display: flex;
-  gap: 1.5rem;
-  
-  a {
-    color: rgba(255,255,255, 0.8);
-    text-decoration: none;
+%btn-base {
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
     font-weight: 500;
-    &:hover { color: $color-white; }
-    &.btn-registro {
-      background: $color-accent;
-      color: #333;
-      padding: 0.4rem 1rem;
-      border-radius: $radius;
-    }
-  }
-}
-
-.hero {
-  grid-column: 1 / -1; 
-  background: linear-gradient(to right, #0f4e3b, #126e51);
-  border-radius: $radius;
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  color: white;
-  
-  .hero-img { display: none; } 
-  h2 { margin: 0 0 0.5rem 0; font-size: 1.5rem; }
-}
-
-.events {
-  grid-column: 2 / 3;
-  margin: 0;
-
-  h3 {
-    font-size: 1rem;
-    color: $color-accent;
-    border-bottom: 2px solid $color-panel;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
     text-transform: uppercase;
-  }
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    font-family: $font-heading;
+    letter-spacing: 1px;
 
-  .grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px; 
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+}
 
-    .bet-card {
-      @extend %card;
-      display: grid;
- 
-      grid-template-columns: 50px 1fr auto; 
-      gap: 15px;
-      align-items: center;
-      padding: 0.8rem;
-      transition: background 0.2s;
+.btn {
+    &-live {
+        @extend %btn-base;
+        background-color: $secondary-color;
+        color: $text-light;
+    }
 
-      &:hover {
-        background-color: lighten($color-panel, 3%);
-      }
+    &-info {
+        @extend %btn-base;
+        background-color: $accent-blue;
+        color: $text-light;
+    }
+}
 
-      .card-img {
-        width: 100%;
-        height: 40px;
-        object-fit: contain;
-        border-radius: 50%;
-        background: #000;
-      }
+.match-card {
+    background: $text-light;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
 
-      header {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+    &:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .status {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
         
-        h4 { 
-          margin: 0; 
-          font-size: 0.95rem; 
-          color: $color-white; 
-          margin-bottom: 4px;
-        }
-        time { 
-          @extend %muted; 
-          font-size: 0.75rem; 
-        }
-      }
-
-      .odds {
-        margin: 0;
-        display: flex;
-        gap: 6px;
-
-        .odd {
-          @include odd-button;
-          font-size: 0.9rem;
-
-        }
-      }
-
-      .bet-info { display: none; } 
+        &.live { color: $secondary-color; }
+        &.upcoming { color: $accent-blue; }
+        &.finished { color: $text-dark; opacity: 0.6; }
     }
-  }
-}
 
-.ticket {
-  @extend %card;
-  grid-column: 3 / 4;
-  position: sticky;
-  top: 80px; 
-  background: #e4e4e4; 
-  color: #333; 
-  h4 {
-    background: $color-primary;
-    color: white;
-    margin: -1rem -1rem 1rem -1rem;
-    padding: 1rem;
-    border-radius: $radius $radius 0 0;
-    text-align: center;
-  }
+    .teams {
+        margin-bottom: 1.5rem;
+        
+        .team {
+            @include flex-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            
+            h3 {
+                font-size: 1.1rem;
+            }
 
-  ul {
-    @extend %list-reset;
-    li {
-      background: white;
-      border-bottom: 1px solid #ccc;
-      padding: 0.5rem;
-      font-size: 0.9rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      
-      .remove-btn { color: red; cursor: pointer; font-weight: bold; }
+            .score {
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+        }
     }
-  }
-
-  .total {
-    font-size: 1.2rem;
-    text-align: right;
-    margin-top: 1rem;
-    font-weight: 800;
-  }
-
-  #apostar {
-    width: 100%;
-    @include btn($color-primary, white);
-    margin-top: 1rem;
-    &:hover { background: darken($color-primary, 5%); }
-  }
-}
-
-.site-footer {
-  grid-column: 1 / -1;
-  background: $color-panel;
-  margin-top: 3rem;
-  padding: 2rem;
-  text-align: center;
-  font-size: 0.8rem;
-  color: $color-text-muted;
-}
-
-@media (max-width: $bp-tablet) {
-  main.container {
-    grid-template-columns: 1fr 300px;
-  }
-
-}
-
-@media (max-width: $bp-mobile) {
-  main.container {
-    grid-template-columns: 1fr; 
-  }
-  
-  .site-header .container {
-    flex-direction: column;
-    height: auto;
-    padding: 10px;
-  }
-
-  .ticket {
-    position: static; 
-    margin-top: 2rem;
-  }
-  
-  .events .grid .bet-card {
-    grid-template-columns: 1fr auto; 
-    .card-img { display: none; } 
-  }
 }
