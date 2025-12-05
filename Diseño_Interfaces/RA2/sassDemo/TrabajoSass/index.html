@@ -1,174 +1,590 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BetSport - Apuestas Deportivas</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
-<style>
-  /* Estilo simple para el botón de eliminar */
-  .remove-btn {
-    margin-left: 10px;
-    color: red;
-    cursor: pointer;
-  }
-</style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BetSport Pro</title>
+    
+    <!-- Fuentes Modernas -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- ENLACE AL CSS -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
+
+<!-- HEADER -->
 <header class="site-header">
-<div class="container">
-<div class="brand-area">
-<img src="img/logo.png" class="logo" alt="Logo BetSport" width="100" />
-<h1 class="brand">BetSport</h1>
-</div>
-
-<nav class="main-nav">
-<ul>
-<li><a href="index.html">Inicio</a></li>
-<li><a href="promociones.html">Promociones</a></li>
-<li><a href="contacto.html">Contacto</a></li>
-<li><a href="registro.html" class="btn-registro">Registro</a></li>
-</ul>
-</nav>
-
-</div>
+  <div class="brand-area">
+    <span class="brand">BetSport</span>
+  </div>
+ <nav class="user-area" style="display: flex; align-items: center; gap: 15px;">
+    <!-- Saldo Visible -->
+    <div class="balance-display" style="text-align: right;">
+        <span style="display: block; font-size: 10px; color: #bbb;">Saldo Disponible</span>
+        <span id="header-balance" style="font-size: 16px; font-weight: bold; color: var(--accent);">50.00€</span>
+    </div>
+    <!-- Icono Usuario -->
+    <div style="background: #444; padding: 5px 10px; border-radius: 4px; font-size: 12px;">
+        👤 Mi Cuenta
+    </div>
+  </nav>
 </header>
 
-<main class="container">
-<section class="hero">
-<img class="hero-img" src="img/logo.png" alt="Apuestas deportivas" width="250" />
-<h2>Apuesta en vivo. Gana a lo grande.</h2>
-<p class="lead">Mercados en directo, cuotas ajustadas y pagos rápidos.</p>
-<a class="btn-primary" href="registro.html">Registrarse</a>
-</section>
+<!-- CONTENEDOR PRINCIPAL -->
+<div class="main-container">
 
-<section class="events">
-<h3>Partidos destacados</h3>
+  <!-- 1. BARRA LATERAL (MENU) -->
+  <aside class="sidebar-nav">
+    <h3>Deportes</h3>
+    <ul class="nav-list">
+      <li><a href="#">⚽ Fútbol</a></li>
+      <li><a href="#">🏀 Baloncesto</a></li>
+      <li><a href="#">🎾 Tenis</a></li>
+      <li><a href="#">🏎️ Fórmula 1</a></li>
+      <li><a href="#">🥊 Boxeo / MMA</a></li>
+      <li><a href="#">🎮 eSports</a></li>
+    <li><a href="promociones.html">🎁 Promociones</a></li>
 
-<div class="grid">
+    </ul>
+    
+    <h3 style="margin-top: 20px;">Competiciones</h3>
+    <ul class="nav-list">
+      <li><a href="#">Champions League</a></li>
+      <li><a href="#">La Liga</a></li>
+      <li><a href="#">Premier League</a></li>
+      <li><a href="#">NBA</a></li>
+    </ul>
+  </aside>
 
-<!-- Fútbol -->
-<article class="bet-card">
-<img src="img/partido1.jpg" alt="Partido destacado" class="card-img"  width="320"/>
-<header>
-<h4>Real Madrid vs Barcelona</h4>
-<time datetime="2025-12-05">5 Dic 2025 - 20:00</time>
-</header>
-<div class="odds">
-<button class="odd" data-event="Real Madrid vs Barcelona" data-odd="2.85">2.85</button>
-<button class="odd" data-event="Real Madrid vs Barcelona" data-odd="2.50">2.50</button>
-<button class="odd" data-event="Real Madrid vs Barcelona" data-odd="2.80">2.80</button>
+  <!-- 2. CONTENIDO CENTRAL (EVENTOS) -->
+  <main class="content-area">
+    
+    <!-- Banner superior -->
+    <div class="hero-banner">
+      <div class="hero-text">
+        <h2 style="font-size: 18px; font-weight: 700;">🔥 Supercuota del Día</h2>
+        <p>Real Madrid, Man. City y Alcaraz ganan sus partidos @ 5.50</p>
+      </div>
+      <button style="background:var(--accent); border:none; padding:5px 15px; border-radius:4px; font-weight:bold; cursor:pointer;">Apostar</button>
+    </div>
+
+    <!-- ================= FÚTBOL: LA LIGA ================= -->
+    <div class="league-header">
+      <span>⚽ España - La Liga</span>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">20:00<br>Hoy</div>
+      <div class="event-details" onclick="abrirModal('Real Madrid vs Barcelona')" style="cursor: pointer;">
+      <div class="teams">Real Madrid vs Barcelona</div>
+      <div class="meta-info">El Clásico - Santiago Bernabéu</div>
+    </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Real Madrid (vs Barça)" data-odd="2.15">
+          <span class="odd-label">1</span> <span class="odd-val">2.15</span>
+        </button>
+        <button class="odd-btn" data-event="Empate (RM-FCB)" data-odd="3.50">
+          <span class="odd-label">X</span> <span class="odd-val">3.50</span>
+        </button>
+        <button class="odd-btn" data-event="Barcelona (vs RM)" data-odd="3.10">
+          <span class="odd-label">2</span> <span class="odd-val">3.10</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">22:00<br>Hoy</div>
+      <div class="event-details" onclick="abrirModal('Atlético Madrid vs Sevilla')" style="cursor: pointer;">
+      <div class="teams">Atlético Madrid vs Sevilla</div>
+    </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Atl. Madrid" data-odd="1.85">
+          <span class="odd-label">1</span> <span class="odd-val">1.85</span>
+        </button>
+        <button class="odd-btn" data-event="Empate (ATM-SEV)" data-odd="3.30">
+          <span class="odd-label">X</span> <span class="odd-val">3.30</span>
+        </button>
+        <button class="odd-btn" data-event="Sevilla" data-odd="4.50">
+          <span class="odd-label">2</span> <span class="odd-val">4.50</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">14:00<br>Mañ</div>
+      <div class="event-details">
+        <div class="teams">Real Betis vs Valencia</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Betis" data-odd="2.05">
+          <span class="odd-label">1</span> <span class="odd-val">2.05</span>
+        </button>
+        <button class="odd-btn" data-event="Empate (BET-VAL)" data-odd="3.20">
+          <span class="odd-label">X</span> <span class="odd-val">3.20</span>
+        </button>
+        <button class="odd-btn" data-event="Valencia" data-odd="3.60">
+          <span class="odd-label">2</span> <span class="odd-val">3.60</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= FÚTBOL: PREMIER LEAGUE ================= -->
+    <div class="league-header" style="background: #2a2a40; margin-top: 15px;">
+      <span>🇬🇧 Inglaterra - Premier League</span>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">13:30<br>Sáb</div>
+      <div class="event-details">
+        <div class="teams">Manchester City vs Liverpool</div>
+        <div class="meta-info">Partido de la jornada</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Man City" data-odd="1.95">
+          <span class="odd-label">1</span> <span class="odd-val">1.95</span>
+        </button>
+        <button class="odd-btn" data-event="Empate (MCI-LIV)" data-odd="3.75">
+          <span class="odd-label">X</span> <span class="odd-val">3.75</span>
+        </button>
+        <button class="odd-btn" data-event="Liverpool" data-odd="3.40">
+          <span class="odd-label">2</span> <span class="odd-val">3.40</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">16:00<br>Sáb</div>
+      <div class="event-details">
+        <div class="teams">Arsenal vs Chelsea</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Arsenal" data-odd="1.70">
+          <span class="odd-label">1</span> <span class="odd-val">1.70</span>
+        </button>
+        <button class="odd-btn" data-event="Empate (ARS-CHE)" data-odd="3.80">
+          <span class="odd-label">X</span> <span class="odd-val">3.80</span>
+        </button>
+        <button class="odd-btn" data-event="Chelsea" data-odd="4.60">
+          <span class="odd-label">2</span> <span class="odd-val">4.60</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= TENIS ================= -->
+    <div class="league-header" style="background: #5c6bc0; margin-top: 15px;">
+      <span>🎾 Tenis - ATP Roland Garros</span>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">11:00<br>Mañ</div>
+      <div class="event-details">
+        <div class="teams">Carlos Alcaraz vs Jannik Sinner</div>
+        <div class="meta-info">Semifinal</div>
+      </div>
+      <div class="odds-container">
+        <!-- En Tenis solo hay 1 o 2 (no hay empate) -->
+        <button class="odd-btn" data-event="C. Alcaraz" data-odd="1.65">
+          <span class="odd-label">1</span> <span class="odd-val">1.65</span>
+        </button>
+        <button class="odd-btn" data-event="J. Sinner" data-odd="2.25">
+          <span class="odd-label">2</span> <span class="odd-val">2.25</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">15:30<br>Mañ</div>
+      <div class="event-details">
+        <div class="teams">N. Djokovic vs Rafa Nadal</div>
+        <div class="meta-info">El último baile</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="N. Djokovic" data-odd="1.55">
+          <span class="odd-label">1</span> <span class="odd-val">1.55</span>
+        </button>
+        <button class="odd-btn" data-event="R. Nadal" data-odd="2.45">
+          <span class="odd-label">2</span> <span class="odd-val">2.45</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= MOTOR F1 ================= -->
+    <div class="league-header" style="background: #b71c1c; margin-top: 15px;">
+      <span>🏎️ F1 - Gran Premio de España</span>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">15:00<br>Dom</div>
+      <div class="event-details">
+        <div class="teams">Ganador de la Carrera</div>
+        <div class="meta-info">Montmeló</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Verstappen (Ganador)" data-odd="1.40">
+          <span class="odd-label">VER</span> <span class="odd-val">1.40</span>
+        </button>
+        <button class="odd-btn" data-event="Norris (Ganador)" data-odd="4.50">
+          <span class="odd-label">NOR</span> <span class="odd-val">4.50</span>
+        </button>
+        <button class="odd-btn" data-event="Alonso (Ganador)" data-odd="15.0">
+          <span class="odd-label">ALO</span> <span class="odd-val">15.0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= UFC / MMA ================= -->
+    <div class="league-header" style="background: #424242; margin-top: 15px;">
+      <span>🥊 UFC 300 - Las Vegas</span>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">04:00<br>Mad</div>
+      <div class="event-details">
+        <div class="teams">Ilia Topuria vs Max Holloway</div>
+        <div class="meta-info">Título Peso Pluma</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Topuria" data-odd="1.72">
+          <span class="odd-label">1</span> <span class="odd-val">1.72</span>
+        </button>
+        <button class="odd-btn" data-event="Holloway" data-odd="2.10">
+          <span class="odd-label">2</span> <span class="odd-val">2.10</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= BASKET NBA ================= -->
+    <div class="league-header" style="background: #0d47a1; margin-top: 15px;">
+      <span>🏀 Baloncesto - NBA</span>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">01:30<br>Mad</div>
+      <div class="event-details">
+        <div class="teams">Boston Celtics vs Miami Heat</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Celtics" data-odd="1.30">
+          <span class="odd-label">1</span> <span class="odd-val">1.30</span>
+        </button>
+        <button class="odd-btn" data-event="Miami Heat" data-odd="3.60">
+          <span class="odd-label">2</span> <span class="odd-val">3.60</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="event-row">
+      <div class="event-time">04:00<br>Mad</div>
+      <div class="event-details">
+        <div class="teams">L.A. Lakers vs G.S. Warriors</div>
+      </div>
+      <div class="odds-container">
+        <button class="odd-btn" data-event="Lakers" data-odd="1.85">
+          <span class="odd-label">1</span> <span class="odd-val">1.85</span>
+        </button>
+        <button class="odd-btn" data-event="Warriors" data-odd="1.95">
+          <span class="odd-label">2</span> <span class="odd-val">1.95</span>
+        </button>
+      </div>
+    </div>
+
+</main>
+
+  <!-- 3. BARRA DERECHA (TICKET) -->
+ <aside class="ticket-sidebar">
+    
+    <!-- NUEVO: PANEL BANCARIO -->
+    <div class="ticket-card" style="margin-bottom: 10px; background: #222; border-top: 3px solid var(--accent);">
+        <div class="ticket-body" style="padding: 10px;">
+            <div style="display: flex; gap: 10px;">
+                <button id="btn-deposit" class="btn-bank deposit">➕ Ingresar</button>
+                <button id="btn-withdraw" class="btn-bank withdraw">➖ Retirar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AQUÍ SIGUE TU TICKET CARD ORIGINAL... -->
+    <div class="ticket-card">
+       ...
+    <div class="ticket-card">
+      <div class="ticket-header">CUPÓN DE APUESTAS</div>
+      
+      <div class="ticket-body" id="ticket-list">
+        <p class="empty-msg">Selecciona una cuota para apostar</p>
+      </div>
+
+      <div class="ticket-footer">
+        <div class="total-row">
+        <span>Cuota Total:</span>
+        <span id="total-odds">0.00</span>
+        </div>
+        <div class="total-row">
+            <span>Ganancia:</span>
+            <span id="potential-win" style="color: green">0.00€</span>
+        </div>
+        
+        <input type="number" id="bet-amount" class="input-apuesta" placeholder="Importe (€)">
+        <button class="btn-apostar" id="place-bet">APOSTAR</button>
+      </div>
+    </div>
+     <div class="ticket-card" style="margin-top: 15px;">
+        <div class="ticket-header" style="background: #333;">MIS APUESTAS</div>
+        <div class="ticket-body" id="my-bets-list">
+            <p style="text-align:center; color:#777; font-size:12px;">No tienes apuestas activas</p>
+        </div>
+    </div>
+  </aside>
+
 </div>
-<p class="bet-info">Opciones: Ganador, Handicaps y Más.</p>
-</article>
+<!-- CÓDIGO DE LA VENTANA (MODAL) -->
+<div id="market-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: #282828; width: 90%; max-width: 600px; padding: 20px; border-radius: 8px; color: white;">
+    
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <h3 id="modal-title" style="margin:0">Opciones de Partido</h3>
+        <span onclick="cerrarModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
+    </div>
 
-<article class="bet-card">
-<img src="img/partido2.jpg" alt="Partido destacado" class="card-img"  width="310"/>
-<header>
-<h4>Atletico de Madrid vs Sevilla</h4>
-<time datetime="2025-12-05">6 Dic 2025 - 21:00</time>
-</header>
-<div class="odds">
-<button class="odd" data-event="Atletico de Madrid vs Sevilla" data-odd="1.35">1.35</button>
-<button class="odd" data-event="Atletico de Madrid vs Sevilla" data-odd="3.50">3.50</button>
-<button class="odd" data-event="Atletico de Madrid vs Sevilla" data-odd="5.20">5.20</button>
+    <!-- Opciones de ejemplo -->
+    <div style="margin-bottom: 15px;">
+        <h4 style="color: #ffdf1b;">Total Goles</h4>
+        <div style="display: flex; gap: 10px;">
+            <button class="odd-btn" style="flex:1; padding:10px;">+2.5 Goles (1.70)</button>
+            <button class="odd-btn" style="flex:1; padding:10px;">-2.5 Goles (2.10)</button>
+        </div>
+    </div>
+
+     <div style="margin-bottom: 15px;">
+        <h4 style="color: #ffdf1b;">Tarjetas</h4>
+        <div style="display: flex; gap: 10px;">
+            <button class="odd-btn" style="flex:1; padding:10px;">Más de 4.5 (1.85)</button>
+            <button class="odd-btn" style="flex:1; padding:10px;">Roja SÍ (3.50)</button>
+        </div>
+    </div>
+
+  </div>
 </div>
-<p class="bet-info">Opciones: Ganador, Handicaps y Más.</p>
-</article>
-
-<!-- Baloncesto -->
-<article class="bet-card">
-<img src="img/baloncesto1.jpg" alt="" class="card-img" />
-<header>
-<img src="img/basket.webp" alt="" width="310">
-<h4>Real Madrid vs Barcelona (Basket)</h4>
-<time datetime="2025-12-06">6 Dic 2025 - 19:30</time>
-</header>
-<div class="odds">
-<button class="odd" data-event="Real Madrid vs Barcelona (Basket)" data-odd="1.90">1.90</button>
-<button class="odd" data-event="Real Madrid vs Barcelona (Basket)" data-odd="1.95">1.95</button>
-</div>
-<p class="bet-info">Opciones: Ganador, Handicap, Total puntos.</p>
-</article>
-
-<!-- Tenis -->
-<article class="bet-card">
-<img src="img/tenis1.jpg" alt=" " width="310" />
-<h4>Federer vs Nadal</h4>
-<header>
-<time datetime="2025-12-07">7 Dic 2025 - 18:00</time>
-</header>
-<div class="odds">
-<button class="odd" data-event="Federer vs Nadal" data-odd="1.80">1.80</button>
-<button class="odd" data-event="Federer vs Nadal" data-odd="2.10">2.10</button>
-</div>
-<p class="bet-info">Opciones: Ganador del partido.</p>
-</article>
-
-</div>
-</section>
-
-<aside class="ticket" id="ticket">
-<h4>Mi Boleto</h4>
-<ul id="ticket-list"></ul>
-<p class="total">Total cuota: <span id="ticket-total">1.00</span></p>
-<button class="btn-secondary" id="apostar">Realizar apuesta</button>
-</aside>
-
+<!-- SCRIPT (Lógica del ticket) -->
 <script>
-// Variables del cupón
-let totalCuota = 1;
-const lista = document.getElementById("ticket-list");
-const total = document.getElementById("ticket-total");
+    // --- VARIABLES ---
+    let misSelecciones = []; // Aquí guardamos las apuestas
+    const ticketList = document.getElementById('ticket-list');
+    const totalOddsEl = document.getElementById('total-odds'); // Asegúrate de tener este ID en tu HTML (en el total)
+    const modal = document.getElementById('market-modal');
 
-// Añadir selección con opción de eliminar
-document.querySelectorAll(".odd").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const evento = btn.dataset.event;
-        const cuota = parseFloat(btn.dataset.odd);
+    // --- 1. ABRIR Y CERRAR MODAL (Lo que ya te funcionaba) ---
+    function abrirModal(nombreEquipo) {
+        if (modal) {
+            document.getElementById('modal-title').innerText = nombreEquipo;
+            modal.style.display = 'flex';
+        }
+    }
 
-        const li = document.createElement("li");
-        li.textContent = evento + " - Cuota " + cuota;
+    function cerrarModal() {
+        if (modal) modal.style.display = 'none';
+    }
 
-        const removeBtn = document.createElement("span");
-        removeBtn.textContent = "✖";
-        removeBtn.classList.add("remove-btn");
-        removeBtn.addEventListener("click", () => {
-            totalCuota /= cuota;
-            total.textContent = totalCuota.toFixed(2);
-            li.remove();
+    window.onclick = function(event) {
+        if (event.target == modal) cerrarModal();
+    }
+
+    // --- 2. DETECTAR CLICS EN CUALQUIER BOTÓN DE CUOTA ---
+    document.addEventListener('click', function(e) {
+        // Buscamos si el clic fue en un botón con clase 'odd-btn'
+        const btn = e.target.closest('.odd-btn');
+        
+        if (btn) {
+            // Efecto visual de clic
+            btn.style.backgroundColor = '#ccc';
+            setTimeout(() => btn.style.backgroundColor = '', 200);
+
+            let nombre = "";
+            let cuota = 1.0;
+
+            // CASO A: Botones de la página principal (tienen data-event y data-odd)
+            if (btn.dataset.event) {
+                nombre = btn.dataset.event;
+                cuota = parseFloat(btn.dataset.odd);
+            } 
+            // CASO B: Botones del Modal (son solo texto, ej: "+2.5 Goles (1.70)")
+            else {
+                // Cogemos el título del modal (ej: Real Madrid vs Barcelona)
+                const tituloPartido = document.getElementById('modal-title').innerText;
+                const textoBoton = btn.innerText; // ej: "+2.5 Goles (1.70)"
+                
+                // Intentamos sacar el número que hay entre paréntesis
+                const numeroEncontrado = textoBoton.match(/\((\d+\.\d+)\)/);
+                
+                if (numeroEncontrado) {
+                    cuota = parseFloat(numeroEncontrado[1]); // El número (1.70)
+                    // El nombre será: Real Madrid - +2.5 Goles
+                    nombre = tituloPartido + " - " + textoBoton.split('(')[0]; 
+                } else {
+                    // Si no tiene paréntesis, usamos el texto tal cual
+                    nombre = tituloPartido + " - " + textoBoton;
+                    cuota = 0; // Cuota desconocida
+                }
+            }
+
+            agregarAlTicket(nombre, cuota);
+        }
+    });
+
+    // --- 3. LÓGICA DEL TICKET (AÑADIR Y BORRAR) ---
+
+    function agregarAlTicket(nombre, cuota) {
+        // Evitar duplicados
+        if (misSelecciones.some(s => s.nombre === nombre)) return;
+
+        misSelecciones.push({ nombre: nombre, cuota: cuota });
+        actualizarTicketVisual();
+    }
+
+    // ESTA ES LA FUNCIÓN QUE TE FALTABA
+    function borrarApuesta(indice) {
+        // Elimina el elemento en la posición 'indice'
+        misSelecciones.splice(indice, 1);
+        actualizarTicketVisual();
+    }
+
+    function actualizarTicketVisual() {
+        // Limpiamos la lista visual
+        if(ticketList) ticketList.innerHTML = '';
+        
+        let cuotaTotal = 1;
+        let hayCuotasValidas = false;
+
+        if (misSelecciones.length === 0) {
+            if(ticketList) ticketList.innerHTML = '<p style="text-align:center; font-size:12px; color:#777; margin-top:20px;">Cupón Vacío</p>';
+            if(totalOddsEl) totalOddsEl.innerText = "0.00";
+            return;
+        }
+
+        // Recorremos el array y creamos el HTML
+        misSelecciones.forEach((item, index) => {
+            if(item.cuota > 0) {
+                cuotaTotal *= item.cuota;
+                hayCuotasValidas = true;
+            }
+
+            const div = document.createElement('div');
+            // Estilos directos para asegurar que se ve bien
+            div.style.borderBottom = '1px solid #ddd';
+            div.style.padding = '8px';
+            div.style.display = 'flex';
+            div.style.justifyContent = 'space-between';
+            div.style.alignItems = 'center';
+            div.style.fontSize = '12px';
+            div.style.background = 'white';
+            div.style.marginBottom = '5px';
+
+            div.innerHTML = `
+                <div>
+                    <strong style="display:block; color:#333;">${item.nombre}</strong>
+                    <span style="color:#666;">Cuota: ${item.cuota > 0 ? item.cuota : 'N/A'}</span>
+                </div>
+                <span 
+                    onclick="borrarApuesta(${index})" 
+                    style="color:red; font-weight:bold; cursor:pointer; font-size:16px; padding:0 5px;"
+                    title="Eliminar apuesta"
+                >
+                    ✖
+                </span>
+            `;
+            
+            if(ticketList) ticketList.appendChild(div);
         });
 
-        li.appendChild(removeBtn);
-        lista.appendChild(li);
-
-        totalCuota *= cuota;
-        total.textContent = totalCuota.toFixed(2);
-    });
-});
-
-// Botón realizar apuesta
-document.getElementById("apostar").addEventListener("click", () => {
-    if (lista.children.length === 0) {
-        alert("No has seleccionado ninguna apuesta.");
-        return;
+        // Actualizar total
+        if(totalOddsEl) totalOddsEl.innerText = hayCuotasValidas ? cuotaTotal.toFixed(2) : "0.00";
     }
-    const importe = parseFloat(prompt("Introduce el importe de la apuesta:"));
-    if (isNaN(importe) || importe <= 0) {
-        alert("Importe no válido.");
-        return;
-    }
-    const ganancia = importe * totalCuota;
-    alert(`Apuesta realizada!\nImporte: ${importe}€\nCuota total: ${totalCuota.toFixed(2)}\nPosible ganancia: ${ganancia.toFixed(2)}€`);
-    // Reset del ticket
-    lista.innerHTML = "";
-    totalCuota = 1;
-    total.textContent = totalCuota.toFixed(2);
-});
 </script>
+<!-- MODAL DE MERCADOS DETALLADOS -->
+<div id="market-modal" class="modal-overlay">
+  <div class="modal-content">
+    
+    <!-- Cabecera del Modal -->
+    <div class="modal-header">
+      <h3 id="modal-title">Evento</h3>
+      <span class="close-modal" style="font-size: 30px; cursor:pointer;">&times;</span>
+    </div>
 
+    <!-- Cuerpo del Modal (Scrollable) -->
+    <div class="modal-body">
+      
+      <!-- MERCADO: GOLES -->
+      <div class="market-group">
+        <h4>⚽ Total de Goles (Más/Menos 2.5)</h4>
+        <div class="market-options">
+          <button class="odd-btn wide"><span>Más de 2.5</span> <span class="odd-val">1.75</span></button>
+          <button class="odd-btn wide"><span>Menos de 2.5</span> <span class="odd-val">2.05</span></button>
+        </div>
+      </div>
+
+      <!-- MERCADO: AMBOS MARCAN -->
+      <div class="market-group">
+        <h4>🥅 Ambos Equipos Marcan</h4>
+        <div class="market-options">
+          <button class="odd-btn wide"><span>Sí</span> <span class="odd-val">1.60</span></button>
+          <button class="odd-btn wide"><span>No</span> <span class="odd-val">2.20</span></button>
+        </div>
+      </div>
+
+      <!-- MERCADO: TARJETAS (Lo que pediste) -->
+      <div class="market-group">
+        <h4>🟨 Tarjetas Totales</h4>
+        <div class="market-list">
+             <div class="market-row">
+                <span>Más de 4.5 Tarjetas</span>
+                <button class="odd-btn">1.85</button>
+            </div>
+            <div class="market-row">
+                <span>Más de 5.5 Tarjetas</span>
+                <button class="odd-btn">2.50</button>
+            </div>
+            <div class="market-row">
+                <span>Tarjeta Roja en el partido - SÍ</span>
+                <button class="odd-btn">3.40</button>
+            </div>
+        </div>
+      </div>
+
+      <!-- MERCADO: TIROS A PUERTA JUGADOR (Lo que pediste) -->
+      <div class="market-group">
+        <h4>🎯 Tiros a Puerta (Jugador)</h4>
+        <div class="market-list">
+            <div class="market-row">
+                <span>Vinicius Jr - Más de 1.5</span>
+                <button class="odd-btn">1.90</button>
+            </div>
+            <div class="market-row">
+                <span>Lewandowski - Más de 1.5</span>
+                <button class="odd-btn">2.10</button>
+            </div>
+            <div class="market-row">
+                <span>Bellingham - Más de 0.5</span>
+                <button class="odd-btn">1.50</button>
+            </div>
+             <div class="market-row">
+                <span>Lamine Yamal - Más de 0.5</span>
+                <button class="odd-btn">1.65</button>
+            </div>
+        </div>
+      </div>
+
+      <!-- MERCADO: CÓRNERS -->
+      <div class="market-group">
+        <h4>⛳ Córners Asiáticos</h4>
+         <div class="market-options">
+          <button class="odd-btn wide"><span>Más de 9</span> <span class="odd-val">1.90</span></button>
+          <button class="odd-btn wide"><span>Menos de 9</span> <span class="odd-val">1.90</span></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 </body>
 </html>

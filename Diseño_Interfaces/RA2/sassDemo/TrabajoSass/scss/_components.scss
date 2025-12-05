@@ -1,84 +1,193 @@
 
-.events{
-margin: 1.5rem 0;
-
-
-h3{
-margin-bottom: 0.75rem;
+.main-nav ul {
+  @extend %list-reset;
+  display: flex;
+  gap: 1.5rem;
+  
+  a {
+    color: rgba(255,255,255, 0.8);
+    text-decoration: none;
+    font-weight: 500;
+    &:hover { color: $color-white; }
+    &.btn-registro {
+      background: $color-accent;
+      color: #333;
+      padding: 0.4rem 1rem;
+      border-radius: $radius;
+    }
+  }
 }
 
-
-.grid{
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 1rem;
-
-
-.bet-card{
-@extend %card; 
-
-
-header{
-display: flex;
-justify-content: space-between;
-align-items: center;
-
-
-h4{ margin: 0; font-size: 1rem; }
-time{ @extend %muted; }
+.hero {
+  grid-column: 1 / -1; 
+  background: linear-gradient(to right, #0f4e3b, #126e51);
+  border-radius: $radius;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  color: white;
+  
+  .hero-img { display: none; } 
+  h2 { margin: 0 0 0.5rem 0; font-size: 1.5rem; }
 }
 
+.events {
+  grid-column: 2 / 3;
+  margin: 0;
 
-.odds{
-margin-top: 0.75rem;
-display: flex;
-gap: 0.5rem;
+  h3 {
+    font-size: 1rem;
+    color: $color-accent;
+    border-bottom: 2px solid $color-panel;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
 
+  .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
 
-.odd{
-@include btn(0.5rem 0.8rem);
-background: transparent;
-border: 1px solid lighten($color-text, 60%);
-border-radius: 8px;
+    .bet-card {
+      @extend %card;
+      display: grid;
+ 
+      grid-template-columns: 50px 1fr auto; 
+      gap: 15px;
+      align-items: center;
+      padding: 0.8rem;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: lighten($color-panel, 3%);
+      }
+
+      .card-img {
+        width: 100%;
+        height: 40px;
+        object-fit: contain;
+        border-radius: 50%;
+        background: #000;
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        
+        h4 { 
+          margin: 0; 
+          font-size: 0.95rem; 
+          color: $color-white; 
+          margin-bottom: 4px;
+        }
+        time { 
+          @extend %muted; 
+          font-size: 0.75rem; 
+        }
+      }
+
+      .odds {
+        margin: 0;
+        display: flex;
+        gap: 6px;
+
+        .odd {
+          @include odd-button;
+          font-size: 0.9rem;
+
+        }
+      }
+
+      .bet-info { display: none; } 
+    }
+  }
 }
+
+.ticket {
+  @extend %card;
+  grid-column: 3 / 4;
+  position: sticky;
+  top: 80px; 
+  background: #e4e4e4; 
+  color: #333; 
+  h4 {
+    background: $color-primary;
+    color: white;
+    margin: -1rem -1rem 1rem -1rem;
+    padding: 1rem;
+    border-radius: $radius $radius 0 0;
+    text-align: center;
+  }
+
+  ul {
+    @extend %list-reset;
+    li {
+      background: white;
+      border-bottom: 1px solid #ccc;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .remove-btn { color: red; cursor: pointer; font-weight: bold; }
+    }
+  }
+
+  .total {
+    font-size: 1.2rem;
+    text-align: right;
+    margin-top: 1rem;
+    font-weight: 800;
+  }
+
+  #apostar {
+    width: 100%;
+    @include btn($color-primary, white);
+    margin-top: 1rem;
+    &:hover { background: darken($color-primary, 5%); }
+  }
 }
 
-
-.bet-info{ @extend %muted; margin-top: 0.6rem; }
-}
-}
-}
-
-
-.ticket{
-@extend %card;
-margin-top: 1.5rem;
-.empty{ @extend %muted; }
-.btn-secondary{
-@include btn();
-background: transparent;
-border: 1px solid $color-primary;
-color: $color-primary;
-margin-top: 0.75rem;
-}
+.site-footer {
+  grid-column: 1 / -1;
+  background: $color-panel;
+  margin-top: 3rem;
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: $color-text-muted;
 }
 
+@media (max-width: $bp-tablet) {
+  main.container {
+    grid-template-columns: 1fr 300px;
+  }
 
-.site-footer{
-margin-top: 2rem;
-padding: 1rem 0;
-text-align: center;
-color: darken($color-text, 40%);
 }
 
+@media (max-width: $bp-mobile) {
+  main.container {
+    grid-template-columns: 1fr; 
+  }
+  
+  .site-header .container {
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
+  }
 
-@media (max-width: $bp-tablet){
-.events .grid{ grid-template-columns: repeat(2, 1fr); }
-}
-
-
-@media (max-width: $bp-mobile){
-.site-header .container{ flex-direction: column; gap: 0.5rem; }
-.events .grid{ grid-template-columns: 1fr; }
-.hero h2{ font-size: 1.4rem; }
+  .ticket {
+    position: static; 
+    margin-top: 2rem;
+  }
+  
+  .events .grid .bet-card {
+    grid-template-columns: 1fr auto; 
+    .card-img { display: none; } 
+  }
 }

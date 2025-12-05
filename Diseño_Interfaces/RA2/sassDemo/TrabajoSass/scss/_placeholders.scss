@@ -1,13 +1,18 @@
-// placehoders para extender
 %card {
-background: $color-card;
-border-radius: $radius;
-box-shadow: $shadow;
-padding: 1rem;
+  background: $color-panel;
+  border-radius: $radius;
+  border: 1px solid darken($color-panel, 5%); 
+  padding: 1rem;
+  color: $color-text;
 }
 
-
 %muted {
-color: darken($color-text, 30%);
-font-size: 0.9rem;
+  color: $color-text-muted;
+  font-size: 0.85rem;
+}
+
+%list-reset {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
