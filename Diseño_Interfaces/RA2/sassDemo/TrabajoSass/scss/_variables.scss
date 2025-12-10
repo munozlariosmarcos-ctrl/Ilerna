@@ -1,18 +1,10 @@
-$color-primary: #126e51;
-$color-primary-light: #1e8e6b;
-$color-accent: #ffdf1b;    
-$color-bg: #333333;       
-$color-panel: #282828;     
-$color-header: #202020;
-$color-text: #e0e0e0;      
-$color-text-muted: #999999;
-$color-white: #ffffff;
+$primary-color: #2ecc71;
+$secondary-color: #e74c3c;
+$dark-bg: #1e272e;
+$light-bg: #f5f6fa;
+$text-dark: #2f3640;
+$text-light: #ffffff;
+$accent-blue: #3498db;
 
-$radius: 4px;    
-$shadow: 0 2px 4px rgba(0,0,0,0.4);
-$max-width: 1400px;       
-$font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-
-$bp-mobile: 768px;
-$bp-tablet: 1024px;
+$font-heading: 'Oswald', sans-serif;
+$font-body: 'Roboto', sans-serif;
