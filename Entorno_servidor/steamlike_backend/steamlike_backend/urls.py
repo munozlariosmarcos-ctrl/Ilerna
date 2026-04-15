@@ -7,4 +7,5 @@ urlpatterns = [
     path("api/library/", include("library.urls")),
     path("api/health/", health),
     path("api/auth/", include("accounts.urls")),
+    path("api/users/", include("accounts.urls_users")),
 ]
