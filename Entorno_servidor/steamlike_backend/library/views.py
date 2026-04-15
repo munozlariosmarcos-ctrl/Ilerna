@@ -31,6 +31,24 @@ def _error_400(errors):
         status=400,
     )
 
+def _error_401():
+    return JsonResponse(
+        {
+            "error": "unauthorized",
+            "message": "No autenticado",
+        },
+        status=401,
+    )
+
+def _error_404():
+    return JsonResponse(
+        {
+            "error": "not_found",
+            "message": "La entrada solicitada no existe",
+        },
+        status=404,
+    )
+
 
 def _validate_entry(data):
     errors = []
@@ -62,8 +80,14 @@ def _validate_entry(data):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def library_entries(request):
+
+    # ← NUEVO: comprobar autenticación
+    if not request.user.is_authenticated:
+        return _error_401()
+
     if request.method == "GET":
-        entries = LibraryEntry.objects.all()
+        # ← NUEVO: filtrar solo las entradas del usuario autenticado
+        entries = LibraryEntry.objects.filter(user=request.user)
         data = [
             {
                 "id": e.id,
@@ -93,6 +117,7 @@ def library_entries(request):
             external_game_id=data["external_game_id"],
             status=data["status"],
             hours_played=data["hours_played"],
+            user=request.user,  # ← NUEVO: asociar al usuario autenticado
         )
     except IntegrityError:
         return JsonResponse(
@@ -120,17 +145,16 @@ def library_entries(request):
 @csrf_exempt
 @require_http_methods(["GET", "PATCH"])
 def library_entry_by_id(request, id):
-    # Buscar la entrada — compartido por GET y PATCH
+
+    # ← NUEVO: comprobar autenticación
+    if not request.user.is_authenticated:
+        return _error_401()
+
+    # ← NUEVO: buscar solo entre las entradas del usuario autenticado
     try:
-        entry = LibraryEntry.objects.get(pk=id)
+        entry = LibraryEntry.objects.get(pk=id, user=request.user)
     except LibraryEntry.DoesNotExist:
-        return JsonResponse(
-            {
-                "error": "not_found",
-                "message": "La entrada solicitada no existe",
-            },
-            status=404,
-        )
+        return _error_404()
 
     if request.method == "GET":
         return JsonResponse(
@@ -142,6 +166,7 @@ def library_entry_by_id(request, id):
             },
             status=200,
         )
+
 
     # PATCH
     try:
