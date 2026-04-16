@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from library.models import LibraryEntry
 
+
 class DemoTest(TestCase):
     def test_demo(self):
         # Comprueba que dos valores son exactamente iguales.
@@ -160,3 +161,5 @@ class LibraryEntryStatusValueTests(TestCase):
             # Comprobaciones
             self.assertEqual(valor, 2)
             
+
+ 
