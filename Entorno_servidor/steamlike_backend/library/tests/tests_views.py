@@ -406,3 +406,154 @@ class LibraryEntryDetailAuthTests(TestCase):
         response_nonexistent = self.client.get(f"{ENTRIES_URL}99999/")
         # Ambos deben devolver exactamente el mismo error
         self.assertEqual(response_other.json(), response_nonexistent.json())    
+
+
+class LibraryEntriesCreateAuthTests(TestCase):
+
+    def setUp(self):
+        """Crea dos usuarios de prueba antes de cada test."""
+        self.ana = User.objects.create_user(username="ana", password="password123")
+        self.carlos = User.objects.create_user(username="carlos", password="password123")
+
+    def _login(self, username, password="password123"):
+        """Helper para hacer login rápido."""
+        self.client.post(
+            LOGIN_URL,
+            data=json.dumps({"username": username, "password": password}),
+            content_type="application/json",
+        )
+
+    # ── Sin autenticar ────────────────────────────────────────────────────────
+
+    def test_create_without_login_returns_401(self):
+        """Sin autenticar debe devolver HTTP 401."""
+        response = self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-1",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_create_without_login_returns_unauthorized(self):
+        """Sin autenticar debe devolver error: unauthorized."""
+        response = self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-1",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+        self.assertEqual(response.json()["error"], "unauthorized")
+
+    def test_create_without_login_returns_correct_message(self):
+        """Sin autenticar el mensaje debe ser exactamente 'No autenticado'."""
+        response = self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-1",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+        self.assertEqual(response.json()["message"], "No autenticado")
+
+    # ── Autenticado ───────────────────────────────────────────────────────────
+
+    def test_create_authenticated_returns_201(self):
+        """Autenticado debe devolver HTTP 201."""
+        self._login("ana")
+        response = self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-de-ana",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_authenticated_returns_correct_data(self):
+        """La respuesta debe contener los datos de la entrada creada."""
+        self._login("ana")
+        response = self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-de-ana",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+        data = response.json()
+        self.assertIn("id", data)
+        self.assertEqual(data["external_game_id"], "juego-de-ana")
+        self.assertEqual(data["status"], "playing")
+        self.assertEqual(data["hours_played"], 5)
+
+    # ── Aislamiento ───────────────────────────────────────────────────────────
+
+    def test_create_entry_not_visible_to_other_user(self):
+        """Una entrada creada por ana no debe aparecer en el listado de carlos."""
+        self._login("ana")
+        self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-de-ana",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+
+        self._login("carlos")
+        response = self.client.get(ENTRIES_URL)
+        ids = [e["external_game_id"] for e in response.json()]
+        self.assertNotIn("juego-de-ana", ids)
+
+    def test_create_entry_visible_to_owner(self):
+        """Una entrada creada por ana debe aparecer en su propio listado."""
+        self._login("ana")
+        self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-de-ana",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+
+        response = self.client.get(ENTRIES_URL)
+        ids = [e["external_game_id"] for e in response.json()]
+        self.assertIn("juego-de-ana", ids)
+
+    def test_create_entry_associated_to_authenticated_user(self):
+        """La entrada creada debe quedar asociada al usuario autenticado."""
+        self._login("ana")
+        response = self.client.post(
+            ENTRIES_URL,
+            data=json.dumps({
+                "external_game_id": "juego-de-ana",
+                "status": "playing",
+                "hours_played": 5,
+            }),
+            content_type="application/json",
+        )
+        entry_id = response.json()["id"]
+
+        # Ana puede acceder a su entrada
+        response = self.client.get(f"{ENTRIES_URL}{entry_id}/")
+        self.assertEqual(response.status_code, 200)
+
+        # Carlos no puede acceder a la entrada de ana
+        self._login("carlos")
+        response = self.client.get(f"{ENTRIES_URL}{entry_id}/")
+        self.assertEqual(response.status_code, 404)
