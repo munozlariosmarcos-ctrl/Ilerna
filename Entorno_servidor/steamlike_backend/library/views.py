@@ -4,6 +4,8 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods
+from steamlike_backend.utils import error_400, error_401, error_404
+
 
 from .models import LibraryEntry
 
@@ -154,51 +156,101 @@ def library_entries(request):
 
 
 # ── /api/library/entries/{id}/ ────────────────────────────────────────────────
-
 @csrf_exempt
-@require_http_methods(["GET", "PATCH"])
+@require_http_methods(["GET", "PATCH", "PUT"])  # ← añadir "PUT"
 def library_entry_by_id(request, id):
 
-    auth_error = _require_auth(request)
-    if auth_error:
-        return auth_error
+    if not request.user.is_authenticated:
+        return error_401()
 
     try:
         entry = LibraryEntry.objects.get(pk=id, user=request.user)
     except LibraryEntry.DoesNotExist:
-        return _json_error("not_found", "No existe", 404)
+        return error_404()
 
     if request.method == "GET":
-        return JsonResponse(_serialize_entry(entry), status=200)
+        return JsonResponse(
+            {
+                "id": entry.id,
+                "external_game_id": entry.external_game_id,
+                "status": entry.status,
+                "hours_played": entry.hours_played,
+            },
+            status=200,
+        )
 
-    # PATCH
-    data, error = _parse_json(request)
-    if error:
-        return error
+    # PUT — sustituir todos los campos
+    if request.method == "PUT":
+        try:
+            data = json.loads(request.body)
+        except (json.JSONDecodeError, ValueError):
+            return error_400([{"field": "body", "message": "El body debe ser un JSON válido."}])
 
-    allowed_fields = {"status", "hours_played"}
-    unknown = set(data.keys()) - allowed_fields
+        if not data:
+            return error_400([{"field": "body", "message": "El body no puede estar vacío. Se requieren: external_game_id, status, hours_played."}])
+
+        errors = _validate_entry(data)
+        if errors:
+            return error_400(errors)
+
+        entry.external_game_id = data["external_game_id"]
+        entry.status = data["status"]
+        entry.hours_played = data["hours_played"]
+        entry.save()
+
+        return JsonResponse(
+            {
+                "id": entry.id,
+                "external_game_id": entry.external_game_id,
+                "status": entry.status,
+                "hours_played": entry.hours_played,
+            },
+            status=200,
+        )
+
+    # PATCH — actualizar solo los campos enviados
+    try:
+        data = json.loads(request.body)
+    except (json.JSONDecodeError, ValueError):
+        return error_400([{"field": "body", "message": "El body debe ser un JSON válido."}])
+
+    if not data:
+        return error_400([{"field": "body", "message": "El body no puede estar vacío. Se requieren: status y/o hours_played."}])
+
+    unknown = set(data.keys()) - {"status", "hours_played"}
     if unknown:
-        return _json_error(
-            "validation_error",
-            "Campos no permitidos",
-            400,
-            {f: "not_allowed" for f in unknown},
-        )
+        errors = [{"field": f, "message": f"El campo '{f}' no está permitido."} for f in unknown]
+        return error_400(errors)
 
-    errors = _validate_entry(data, partial=True)
+    errors = []
+
+    if "status" in data:
+        if not isinstance(data["status"], str):
+            errors.append({"field": "status", "message": "'status' debe ser un string."})
+        elif data["status"] not in ALLOWED_STATUSES:
+            errors.append({"field": "status", "message": f"'status' debe ser uno de: {', '.join(ALLOWED_STATUSES)}. Recibido: '{data['status']}'."})
+
+    if "hours_played" in data:
+        if not isinstance(data["hours_played"], int) or isinstance(data["hours_played"], bool):
+            errors.append({"field": "hours_played", "message": "'hours_played' debe ser un integer."})
+        elif data["hours_played"] < 0:
+            errors.append({"field": "hours_played", "message": "'hours_played' debe ser >= 0."})
+
     if errors:
-        return _json_error(
-            "validation_error",
-            "Datos inválidos",
-            400,
-            {e["field"]: e["message"] for e in errors},
-        )
+        return error_400(errors)
 
-    for field in allowed_fields:
-        if field in data:
-            setattr(entry, field, data[field])
-
+    if "status" in data:
+        entry.status = data["status"]
+    if "hours_played" in data:
+        entry.hours_played = data["hours_played"]
     entry.save()
 
-    return JsonResponse(_serialize_entry(entry), status=200)
+    return JsonResponse(
+        {
+            "id": entry.id,
+            "external_game_id": entry.external_game_id,
+            "status": entry.status,
+            "hours_played": entry.hours_played,
+        },
+        status=200,
+    )
