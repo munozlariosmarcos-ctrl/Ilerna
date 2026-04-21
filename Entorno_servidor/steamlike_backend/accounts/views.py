@@ -137,4 +137,4 @@ def change_password(request):
 @require_http_methods(["POST"])
 def logout_view(request):
     logout(request)
-    return JsonResponse({}, status=204)
+    return JsonResponse({"sesion cerrada": True}, status=200)
