@@ -4,7 +4,10 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods
-from steamlike_backend.utils import error_400, error_401, error_404
+
+import requests
+from steamlike_backend.utils import error_400, error_401, error_404, error_502, error_503, error_invalid_external_game_id
+
 
 
 from .models import LibraryEntry
@@ -97,6 +100,34 @@ def _require_auth(request):
         return _json_error("unauthorized", "No autenticado", 401)
     return None
 
+def _check_external_game_exists(external_game_id):
+    try:
+        response = requests.get(
+            "https://www.cheapshark.com/api/1.0/games",
+            params={"id": external_game_id},
+            timeout=5,
+        )
+    except requests.Timeout:
+        return error_503()
+    except requests.ConnectionError:
+        return error_503()
+
+    # Si CheapShark devuelve 404 o similar → juego no existe
+    if response.status_code == 404:
+        return error_invalid_external_game_id()
+
+    # Cualquier otro error del servidor
+    if not response.ok:
+        return error_502()
+
+    try:
+        game = response.json()
+        if not game or "info" not in game:
+            return error_invalid_external_game_id()
+    except Exception:
+        return error_502()
+
+    return None
 
 # ── health ───────────────────────────────────────────────────────────────────
 
@@ -123,7 +154,7 @@ def library_entries(request):
             status=200,
         )
 
-    # POST
+# POST
     data, error = _parse_json(request)
     if error:
         return error
@@ -136,6 +167,11 @@ def library_entries(request):
             400,
             {e["field"]: e["message"] for e in errors},
         )
+
+    # Validar que el juego existe en CheapShark ← añadir esto
+    external_error = _check_external_game_exists(data["external_game_id"])
+    if external_error:
+        return external_error
 
     try:
         entry = LibraryEntry.objects.create(
