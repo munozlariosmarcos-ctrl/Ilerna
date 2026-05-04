@@ -1,13 +1,12 @@
 from django.test import TestCase
-
-#Creacion de Test Para Usuarios
-
 import json
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 REGISTER_URL = "/api/auth/register/"
+LOGIN_URL = "/api/auth/login/"
+ME_URL = "/api/users/me/"
 
 
 class RegisterViewTests(TestCase):
@@ -18,7 +17,7 @@ class RegisterViewTests(TestCase):
         """Un registro correcto debe devolver HTTP 201."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "password123"}),
+            data=json.dumps({"username": "ana", "password": "password123", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 201)
@@ -27,7 +26,7 @@ class RegisterViewTests(TestCase):
         """La respuesta debe contener id y username."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "password123"}),
+            data=json.dumps({"username": "ana", "password": "password123", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         data = response.json()
@@ -39,7 +38,7 @@ class RegisterViewTests(TestCase):
         """La respuesta NO debe contener la contraseña."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "password123"}),
+            data=json.dumps({"username": "ana", "password": "password123", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertNotIn("password", response.json())
@@ -48,7 +47,7 @@ class RegisterViewTests(TestCase):
         """El usuario debe quedar guardado en la base de datos."""
         self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "password123"}),
+            data=json.dumps({"username": "ana", "password": "password123", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertTrue(User.objects.filter(username="ana").exists())
@@ -79,7 +78,7 @@ class RegisterViewTests(TestCase):
         """Si falta password debe devolver HTTP 400."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana"}),
+            data=json.dumps({"username": "ana", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
@@ -88,7 +87,7 @@ class RegisterViewTests(TestCase):
         """Si falta username debe devolver HTTP 400."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"password": "password123"}),
+            data=json.dumps({"password": "password123", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
@@ -97,7 +96,7 @@ class RegisterViewTests(TestCase):
         """Si faltan campos debe devolver error: validation_error."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana"}),
+            data=json.dumps({"username": "ana", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.json()["error"], "validation_error")
@@ -108,7 +107,7 @@ class RegisterViewTests(TestCase):
         """Una password menor de 8 caracteres debe devolver HTTP 400."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "abc"}),
+            data=json.dumps({"username": "ana", "password": "abc", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
@@ -117,7 +116,7 @@ class RegisterViewTests(TestCase):
         """Una password corta debe devolver error: validation_error."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "abc"}),
+            data=json.dumps({"username": "ana", "password": "abc", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.json()["error"], "validation_error")
@@ -126,7 +125,7 @@ class RegisterViewTests(TestCase):
         """El campo password debe aparecer en details del error."""
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "abc"}),
+            data=json.dumps({"username": "ana", "password": "abc", "email": "ana@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertIn("password", response.json()["details"])
@@ -135,44 +134,40 @@ class RegisterViewTests(TestCase):
 
     def test_register_duplicate_username_returns_400(self):
         """Un username ya en uso debe devolver HTTP 400."""
-        User.objects.create_user(username="ana", password="password123")
+        User.objects.create_user(username="ana", password="password123", email="ana@ejemplo.com")
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "otrapassword123"}),
+            data=json.dumps({"username": "ana", "password": "otrapassword123", "email": "ana2@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
 
     def test_register_duplicate_username_returns_validation_error(self):
         """Un username repetido debe devolver error: validation_error."""
-        User.objects.create_user(username="ana", password="password123")
+        User.objects.create_user(username="ana", password="password123", email="ana@ejemplo.com")
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "otrapassword123"}),
+            data=json.dumps({"username": "ana", "password": "otrapassword123", "email": "ana2@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertEqual(response.json()["error"], "validation_error")
 
     def test_register_duplicate_username_error_in_details(self):
         """El campo username debe aparecer en details del error."""
-        User.objects.create_user(username="ana", password="password123")
+        User.objects.create_user(username="ana", password="password123", email="ana@ejemplo.com")
         response = self.client.post(
             REGISTER_URL,
-            data=json.dumps({"username": "ana", "password": "otrapassword123"}),
+            data=json.dumps({"username": "ana", "password": "otrapassword123", "email": "ana2@ejemplo.com"}),
             content_type="application/json",
         )
         self.assertIn("username", response.json()["details"])
-
-
-    
-LOGIN_URL = "/api/auth/login/"
 
 
 class LoginViewTests(TestCase):
 
     def setUp(self):
         """Crea un usuario de prueba antes de cada test."""
-        User.objects.create_user(username="ana", password="password123")
+        User.objects.create_user(username="ana", password="password123", email="ana@ejemplo.com")
 
     # ── Caso válido ───────────────────────────────────────────────────────────
 
@@ -314,15 +309,11 @@ class LoginViewTests(TestCase):
         self.assertEqual(response.json()["error"], "validation_error")
 
 
-
-ME_URL = "/api/users/me/"
-
-
 class MeViewTests(TestCase):
 
     def setUp(self):
         """Crea un usuario de prueba antes de cada test."""
-        User.objects.create_user(username="ana", password="password123")
+        User.objects.create_user(username="ana", password="password123", email="ana@ejemplo.com")
 
     # ── Sin autenticar ────────────────────────────────────────────────────────
 
@@ -390,4 +381,3 @@ class MeViewTests(TestCase):
         )
         response = self.client.get(ME_URL)
         self.assertEqual(response.json()["username"], "ana")
-
