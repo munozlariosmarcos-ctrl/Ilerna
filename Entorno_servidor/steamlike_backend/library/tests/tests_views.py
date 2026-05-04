@@ -16,7 +16,7 @@ class LibraryEntryExternalIdLengthTests(TestCase):
 
         # Comprobaciones
         # Comprobar el código HTTP que devuelve una vista
-        self.assertEqual(response.status_code, 900)
+        self.assertEqual(response.status_code, 200)
         # Comprobar el contenido de la respuesta
         self.assertEqual(response.json(), {"status": "ok"})
         # Verifica que una clave existe dentro del JSON de la respuesta.
