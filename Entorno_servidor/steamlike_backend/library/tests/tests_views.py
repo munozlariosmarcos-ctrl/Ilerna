@@ -37,7 +37,7 @@ class HealthCheckTests(TestCase):
     def test_health_returns_200(self):
         """El endpoint /api/health/ debe responder con HTTP 200."""
         response = self.client.get("/api/health/")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 999)
 
     def test_health_returns_json_with_status_ok(self):
         """La respuesta debe ser un JSON con exactamente {"status": "ok"}."""
