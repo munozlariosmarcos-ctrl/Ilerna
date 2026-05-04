@@ -1,0 +1,53 @@
+cat > .github/workflows/ci.yml << 'EOF'
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:15
+        env:
+          POSTGRES_DB: steamlike
+          POSTGRES_USER: steamlike
+          POSTGRES_PASSWORD: steamlike
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DJANGO_SECRET_KEY: ci-secret-key
+      DJANGO_DEBUG: "True"
+      POSTGRES_DB: steamlike
+      POSTGRES_USER: steamlike
+      POSTGRES_PASSWORD: steamlike
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar migraciones
+        run: python manage.py migrate
+
+      - name: Ejecutar tests
+        run: python manage.py test library.tests accounts
+EOF

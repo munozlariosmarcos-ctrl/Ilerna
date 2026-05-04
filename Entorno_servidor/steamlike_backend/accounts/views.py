@@ -1,12 +1,15 @@
 import json
+import logging
 
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods, require_GET
-from django.contrib.auth import authenticate, login, logout, get_user_model
+
+from steamlike_backend.email_service import send_email, EmailServiceError
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -26,9 +29,9 @@ def _parse_json(request):
     return data, None
 
 def _serialize_user(user):
-    return {"id": user.id, "username": user.username}
+    return {"id": user.id, "username": user.username, "email": user.email}
 
-def _validate_auth(data, require_password_length=False):
+def _validate_auth(data, require_password_length=False, require_email=False):
     errors = []
     def add(field, msg): errors.append({"field": field, "message": msg})
 
@@ -43,6 +46,14 @@ def _validate_auth(data, require_password_length=False):
         add("password", "Debe ser string")
     elif require_password_length and len(data["password"]) < 8:
         add("password", "Debe tener al menos 8 caracteres")
+
+    if require_email:
+        if "email" not in data:
+            add("email", "Campo obligatorio")
+        elif not isinstance(data["email"], str) or not data["email"].strip():
+            add("email", "Debe ser string no vacío")
+        elif "@" not in data["email"]:
+            add("email", "Debe contener una @ válida")
 
     return errors
 
@@ -59,14 +70,38 @@ def register(request):
     data, error = _parse_json(request)
     if error: return error
 
-    errors = _validate_auth(data, require_password_length=True)
+    errors = _validate_auth(data, require_password_length=True, require_email=True)
     if errors:
         return _json_error("validation_error", "Datos inválidos", 400, {e["field"]: e["message"] for e in errors})
 
     if User.objects.filter(username=data["username"]).exists():
         return _json_error("validation_error", "Username en uso", 400, {"username": "duplicate"})
 
-    user = User.objects.create_user(username=data["username"], password=data["password"])
+    if User.objects.filter(email=data["email"]).exists():
+        return _json_error("validation_error", "Email ya en uso", 400, {"email": "duplicate"})
+
+    user = User.objects.create_user(
+        username=data["username"],
+        password=data["password"],
+        email=data["email"],
+    )
+
+    # Enviar email de bienvenida — si falla, el usuario se crea igualmente
+    try:
+        send_email(
+            to=user.email,
+            subject="¡Bienvenido a GameShelf!",
+            text=f"Hola {user.username}, tu cuenta ha sido creada correctamente.",
+            html=f"<h1>¡Bienvenido, {user.username}!</h1><p>Tu cuenta en GameShelf ha sido creada correctamente.</p>",
+            action="register_welcome",
+            user=user,
+        )
+    except EmailServiceError as e:
+        logger.error(
+            "Fallo al enviar email de bienvenida | action=register_welcome user_id=%s username=%s result=error tipo=%s",
+            user.id, user.username, e.error,
+        )
+
     return JsonResponse(_serialize_user(user), status=201)
 
 
@@ -86,7 +121,7 @@ def login_view(request):
         return _json_error("unauthorized", "Credenciales incorrectas", 401)
 
     login(request, user)
-    return JsonResponse(_serialize_user(user), status=200)
+    return JsonResponse({"id": user.id, "username": user.username}, status=200)
 
 
 # ── GET /api/users/me/ ────────────────────────────────────────────────────────
@@ -95,6 +130,14 @@ def me(request):
     auth_error = _require_auth(request)
     if auth_error: return auth_error
     return JsonResponse(_serialize_user(request.user), status=200)
+
+
+# ── POST /api/auth/logout/ ────────────────────────────────────────────────────
+@csrf_exempt
+@require_http_methods(["POST"])
+def logout_view(request):
+    logout(request)
+    return JsonResponse({}, status=204)
 
 
 # ── POST /api/users/me/password/ ─────────────────────────────────────────────
@@ -131,10 +174,3 @@ def change_password(request):
     user.save()
 
     return JsonResponse({"ok": True}, status=200)
-
-# ── POST /api/auth/logout/ ────────────────────────────────────────────────────
-@csrf_exempt
-@require_http_methods(["POST"])
-def logout_view(request):
-    logout(request)
-    return JsonResponse({"sesion cerrada": True}, status=200)

@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     "library",
     "accounts",
     "catalog",
+<<<<<<< HEAD
 
+=======
+    "debug", 
+>>>>>>> Devops-semana5
 ]
 
 MIDDLEWARE = [
@@ -109,3 +113,32 @@ CSRF_TRUSTED_ORIGINS = _env_csv("DJANGO_CSRF_TRUSTED_ORIGINS", "http://frontend:
 # Dev defaults for cookies (keep simple; hardening can be done later)
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
+
+
+MAILEROO_API_KEY = _env("MAILEROO_API_KEY", "")
+MAILEROO_FROM = _env("MAILEROO_FROM", "")
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{levelname}] {asctime} {name} | {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "steamlike_backend.email_service": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
