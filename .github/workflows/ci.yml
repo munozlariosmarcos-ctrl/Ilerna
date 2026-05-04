@@ -52,3 +52,7 @@ jobs:
       - name: Ejecutar tests
         run: python manage.py test library.tests accounts
         working-directory: Entorno_servidor/steamlike_backend
+
+      - name: Desplegar en Render
+        if: success()
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
