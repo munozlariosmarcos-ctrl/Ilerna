@@ -180,6 +180,10 @@ class LibraryEntriesAuthTests(TestCase):
         """Crea dos usuarios de prueba antes de cada test."""
         self.ana = User.objects.create_user(username="ana", password="password123")
         self.carlos = User.objects.create_user(username="carlos", password="password123")
+        self.mock_check = patch('library.views._check_external_game_exists', return_value=None).start()
+
+    def tearDown(self):
+        patch.stopall()
 
     def _login(self, username, password="password123"):
         """Helper para hacer login rápido."""
@@ -311,6 +315,11 @@ class LibraryEntryDetailAuthTests(TestCase):
         """Crea dos usuarios y una entrada para cada uno."""
         self.ana = User.objects.create_user(username="ana", password="password123")
         self.carlos = User.objects.create_user(username="carlos", password="password123")
+        self.mock_check = patch('library.views._check_external_game_exists', return_value=None).start()
+
+    def tearDown(self):
+        patch.stopall()
+
 
         self._login("ana")
         response = self.client.post(
@@ -415,6 +424,11 @@ class LibraryEntriesCreateAuthTests(TestCase):
         """Crea dos usuarios de prueba antes de cada test."""
         self.ana = User.objects.create_user(username="ana", password="password123")
         self.carlos = User.objects.create_user(username="carlos", password="password123")
+        self.mock_check = patch('library.views._check_external_game_exists', return_value=None).start()
+   
+
+    def tearDown(self):
+        patch.stopall()
 
     def _login(self, username, password="password123"):
         """Helper para hacer login rápido."""
