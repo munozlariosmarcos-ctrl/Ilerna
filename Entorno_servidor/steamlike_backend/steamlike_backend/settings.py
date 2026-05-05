@@ -38,11 +38,8 @@ INSTALLED_APPS = [
     "library",
     "accounts",
     "catalog",
-<<<<<<< HEAD
-
-=======
     "debug", 
->>>>>>> Devops-semana5
+
 ]
 
 MIDDLEWARE = [
