@@ -49,10 +49,18 @@ jobs:
         run: python manage.py migrate
         working-directory: Entorno_servidor/steamlike_backend
 
-      - name: Ejecutar tests
-        run: python manage.py test library.tests accounts
+      - name: Ejecutar tests con coverage
+        run: coverage run manage.py test library.tests accounts
         working-directory: Entorno_servidor/steamlike_backend
 
+      - name: Mostrar porcentaje de cobertura
+        run: coverage report
+        working-directory: Entorno_servidor/steamlike_backend
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test  
+
+    steps:
       - name: Desplegar en Render
-        if: success()
         run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
