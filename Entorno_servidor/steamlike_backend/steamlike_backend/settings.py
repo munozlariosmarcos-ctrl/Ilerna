@@ -137,6 +137,16 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
+        "accounts.views": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "catalog.catalog_service": {  # ← añadir esto
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
 
