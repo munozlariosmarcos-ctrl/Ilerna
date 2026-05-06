@@ -17,6 +17,7 @@ class CatalogServiceError(Exception):
 
 def _fetch_search(q):
     """Llama a CheapShark para buscar juegos por título."""
+    logger.info("Consultando proveedor externo | action=search q=%s", q)
     try:
         response = requests.get(
             CHEAPSHARK_URL,
@@ -24,11 +25,17 @@ def _fetch_search(q):
             timeout=5,
         )
     except requests.Timeout:
+        logger.error("Timeout al consultar proveedor | action=search q=%s", q)
         raise CatalogServiceError("external_service_unavailable", 503)
     except requests.ConnectionError:
+        logger.error("Error de red al consultar proveedor | action=search q=%s", q)
         raise CatalogServiceError("external_service_unavailable", 503)
 
     if not response.ok:
+        logger.error(
+            "Proveedor respondió con error | action=search q=%s status_code=%s",
+            q, response.status_code,
+        )
         raise CatalogServiceError("external_service_error", 502)
 
     try:
@@ -36,7 +43,13 @@ def _fetch_search(q):
         if not isinstance(games, list):
             raise ValueError("Respuesta inválida")
     except Exception:
+        logger.error("Respuesta inválida del proveedor | action=search q=%s", q)
         raise CatalogServiceError("external_service_error", 502)
+
+    logger.info(
+        "Proveedor respondió correctamente | action=search q=%s results=%s",
+        q, len(games),
+    )
 
     return [
         {
@@ -49,48 +62,51 @@ def _fetch_search(q):
 
 
 def search_games(q):
-    """
-    Busca juegos por título.
-    1. Consulta Redis — si hay datos los devuelve directamente.
-    2. Si no hay datos en Redis — llama a CheapShark.
-    3. Si CheapShark falla pero hay datos stale en Redis — los usa.
-    4. Si CheapShark falla y no hay datos — propaga el error.
-    """
     cache_key = f"catalog:search:{q.lower().strip()}"
 
-    # Comprobar Redis
+    # Consulta Redis
     cached = cache.get(cache_key)
     if cached is not None:
-        logger.info("Cache HIT para búsqueda | q=%s", q)
+        logger.info(
+            "Datos obtenidos desde Redis | action=search q=%s origen=cache resultado=ok",
+            q,
+        )
         return cached
 
-    logger.info("Cache MISS para búsqueda | q=%s", q)
+    logger.info(
+        "No hay datos en Redis, consultando proveedor | action=search q=%s origen=proveedor",
+        q,
+    )
 
     # Llamar a CheapShark
     try:
         results = _fetch_search(q)
         cache.set(cache_key, results, timeout=CACHE_TTL)
+        logger.info(
+            "Datos guardados en Redis | action=search q=%s ttl=%ss",
+            q, CACHE_TTL,
+        )
         return results
     except CatalogServiceError as e:
         # Si falla CheapShark, intentar usar datos stale de Redis
         stale = cache.get(cache_key)
         if stale is not None:
             logger.warning(
-                "CheapShark falló pero se usan datos cacheados | q=%s error=%s",
+                "Proveedor falló, usando datos cacheados | action=search q=%s origen=cache_fallback error=%s resultado=ok",
                 q, e.error,
             )
             return stale
-        logger.error("CheapShark falló y no hay datos en caché | q=%s error=%s", q, e.error)
+        logger.error(
+            "Proveedor falló y no hay datos en Redis | action=search q=%s error=%s resultado=error",
+            q, e.error,
+        )
         raise
 
 
 def resolve_games(ids):
-    """
-    Resuelve una lista de IDs externos consultando CheapShark.
-    Devuelve lista de dicts con external_game_id, title, thumb.
-    """
     results = []
     for game_id in ids:
+        logger.info("Consultando proveedor externo | action=resolve game_id=%s", game_id)
         try:
             response = requests.get(
                 CHEAPSHARK_URL,
@@ -98,11 +114,17 @@ def resolve_games(ids):
                 timeout=5,
             )
         except requests.Timeout:
+            logger.error("Timeout al consultar proveedor | action=resolve game_id=%s", game_id)
             raise CatalogServiceError("external_service_unavailable", 503)
         except requests.ConnectionError:
+            logger.error("Error de red al consultar proveedor | action=resolve game_id=%s", game_id)
             raise CatalogServiceError("external_service_unavailable", 503)
 
         if not response.ok:
+            logger.error(
+                "Proveedor respondió con error | action=resolve game_id=%s status_code=%s",
+                game_id, response.status_code,
+            )
             raise CatalogServiceError("external_service_error", 502)
 
         try:
@@ -113,7 +135,13 @@ def resolve_games(ids):
                     "title": game["info"]["title"],
                     "thumb": game["info"]["thumb"],
                 })
+                logger.info(
+                    "Juego resuelto correctamente | action=resolve game_id=%s resultado=ok",
+                    game_id,
+                )
         except Exception:
+            logger.error("Respuesta inválida del proveedor | action=resolve game_id=%s", game_id)
             raise CatalogServiceError("external_service_error", 502)
 
     return results
+
